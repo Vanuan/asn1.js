@@ -43,12 +43,11 @@ describe('asn1.js DER decoder', function() {
     assert.deepEqual(out, { 'key': true, 'opt': 'default' });
   });
 
-  function test(name, model_definition, der_encoded_hex, model_expected) {
+  function test(name, model, inputHex, expected) {
     it(name, function() {
-      var Model, model_actual;
-      Model = asn1.define('Model', model_definition);
-      model_actual = Model.decode(new Buffer(der_encoded_hex,'hex'), 'der');
-      assert.deepEqual(model_actual, model_expected);
+      var M = asn1.define('Model', model);
+      var decoded = M.decode(new Buffer(inputHex,'hex'), 'der');
+      assert.deepEqual(decoded, expected);
     });
   }
 
