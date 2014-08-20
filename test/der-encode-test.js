@@ -19,4 +19,24 @@ describe('asn1.js DER encoder', function() {
     assert.equal(encoded.toString('hex'), 'a203040158');
     assert.equal(encoded.length, 5);
   })
+
+  function test(name, model_definition, model_value, der_expected) {
+    it(name, function() {
+      var Model, der_actual;
+      Model = asn1.define('Model', model_definition);
+      der_actual = Model.encode(model_value, 'der');
+      assert.deepEqual(der_actual, new Buffer(der_expected,'hex'));
+    });
+  }
+
+  test('should encode implicit seqof', function() {
+    this.implicit(0).seqof(
+      asn1.define('',function () {
+        this.seq().obj(
+          this.key('a').int()
+        )
+      })
+    );
+  }, [{'a':1}], 'a0053003020101');
+
 });
